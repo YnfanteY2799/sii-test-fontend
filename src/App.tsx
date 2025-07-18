@@ -1,5 +1,12 @@
+import { BrowserRouter, createBrowserRouter } from "react-router";
 import type { ReactNode } from "react";
 
 export default function App(): ReactNode {
-	return <div className="bg-red-400"></div>;
+	const router = createBrowserRouter([]);
+
+	return (
+		<ThemeProvider>
+			<BrowserRouter></BrowserRouter>
+		</ThemeProvider>
+	);
 }
