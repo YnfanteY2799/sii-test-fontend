@@ -1,7 +1,7 @@
-import ThemeProvider from "@/components/providers/ThemeProvider";
+import ThemeProvider from "@/components/providers/ThemeProvider.tsx";
+import MonobankCard from "./components/Card.tsx";
 
 import type { ReactNode } from "react";
-import MonobankCard from "./components/Card";
 
 export default function App(): ReactNode {
 	return (

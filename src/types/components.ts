@@ -15,6 +15,13 @@ export interface ThemeProviderProps {
 
 /** Type Provider State */
 export type ThemeProviderState = {
-  setTheme: (theme: Theme) => void;
+	setTheme: (theme: Theme) => void;
 	theme: Theme;
 };
+
+export interface ICardProps {
+	cardholderName?: string;
+	cardNumber?: string;
+	expiryDate?: string;
+	cvv?: string;
+}

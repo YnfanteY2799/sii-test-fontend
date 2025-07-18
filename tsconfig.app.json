@@ -20,6 +20,7 @@
     /* Linting */
     "noUncheckedSideEffectImports": true,
     "noFallthroughCasesInSwitch": true,
+    "allowArbitraryExtensions": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noUnusedLocals": true,

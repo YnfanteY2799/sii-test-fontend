@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import type { Theme, ThemeProviderProps, ThemeProviderState } from "@/types/components";
+import type { Theme, ThemeProviderProps, ThemeProviderState } from "@/types/components.ts";
 
 const ThemeProviderContext = createContext<ThemeProviderState>({ theme: "system", setTheme: () => null });
 
