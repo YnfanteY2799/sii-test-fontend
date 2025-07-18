@@ -46,15 +46,11 @@ import type { TValidCreditCardType, TCardInfo } from "@/types/data.ts";
  */
 function isValidLuhn(cardNumber: string): boolean {
 	// Input validation
-	if (typeof cardNumber !== "string") throw new TypeError("Card number must be a string");
-
-	// Check for empty string or non-digit characters
-	if (cardNumber.length === 0 || !/^\d+$/.test(cardNumber)) return false;
+	if (typeof cardNumber !== "string" || cardNumber.length === 0 || !/^\d+$/.test(cardNumber)) return false;
 
 	let sum = 0;
-	let shouldDouble = false; // More descriptive variable name
+	let shouldDouble = false;
 
-	// Iterate through the card number from right to left (reverse order)
 	for (let i = cardNumber.length - 1; i >= 0; i--) {
 		let digit = parseInt(cardNumber.charAt(i), 10); // Explicit radix
 
