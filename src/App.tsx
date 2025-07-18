@@ -1,12 +1,11 @@
-import { BrowserRouter, createBrowserRouter } from "react-router";
+import ThemeProvider from "@/components/providers/ThemeProvider";
+
 import type { ReactNode } from "react";
 
 export default function App(): ReactNode {
-	const router = createBrowserRouter([]);
-
 	return (
 		<ThemeProvider>
-			<BrowserRouter></BrowserRouter>
+			<></>
 		</ThemeProvider>
 	);
 }
