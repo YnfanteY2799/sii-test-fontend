@@ -159,7 +159,7 @@ export const formatOnlyNumber = (value: string): string => value.replace(/\D/g, 
 
 export const formatCardholderName = (value: string): string => value.replace(/[^a-zA-ZÀ-ÿĀ-žА-я\s]/g, "");
 
-export const formatExpirationDate = (value: string): string => {
+export function formatExpirationDate(value: string): string {
 	const cleaned = value.replace(/\D/g, "");
 	if (cleaned.length >= 2) {
 		const month = cleaned.slice(0, 2);
@@ -167,5 +167,4 @@ export const formatExpirationDate = (value: string): string => {
 		return year ? `${month}/${year}` : month;
 	}
 	return cleaned;
-};
-
+}

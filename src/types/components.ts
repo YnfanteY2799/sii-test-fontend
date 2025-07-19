@@ -26,3 +26,25 @@ export interface ICardProps {
 	handleFlip?: Function;
 	cvv?: string;
 }
+
+export interface StoredCard {
+	cardholderName: string;
+	cardNumber: string;
+	expiryDate: string;
+	cardType: string;
+	id: string;
+}
+
+export interface TableFilters {
+	sortBy: "cardholderName" | "dateAdded" | "lastUsed" | "expiryDate";
+	sortOrder: "asc" | "desc";
+	cardType: string;
+	search: string;
+	status: string;
+}
+
+export interface EditingCard {
+	field: "cardholderName" | "expiryDate" | "status";
+	value: string;
+	id: string;
+}
