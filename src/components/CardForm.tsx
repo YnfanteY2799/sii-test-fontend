@@ -303,7 +303,7 @@ export default function CardForm(): ReactNode {
 						type="button"
 						onClick={() => reset()}
 						className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer">
-						Limpiar
+						Cancelar
 					</button>
 				</motion.div>
 			</form>
