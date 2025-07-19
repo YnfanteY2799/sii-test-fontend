@@ -10,6 +10,19 @@ export default function MonobankCard(props: ICardProps): ReactNode {
 	// State
 	const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
+	// Constants
+	const chipContactPads = [
+		{ top: "3px", left: "3px" },
+		{ top: "3px", left: "15px" },
+		{ top: "3px", right: "3px" },
+		{ top: "12px", left: "3px" },
+		{ top: "12px", left: "15px" },
+		{ top: "12px", right: "3px" },
+		{ bottom: "3px", left: "3px" },
+		{ bottom: "3px", left: "15px" },
+		{ bottom: "3px", right: "3px" },
+	];
+
 	// Functions
 	function onMouse(): void {
 		setIsFlipped((old) => !old);
@@ -74,10 +87,10 @@ export default function MonobankCard(props: ICardProps): ReactNode {
 
 					{/* Enhanced Card shine effect with Framer Motion */}
 					<motion.div
-						className="absolute inset-0 pointer-events-none overflow-hidden"
-						variants={shineVariants}
 						initial="initial"
-						whileHover="hover">
+						whileHover="hover"
+						variants={shineVariants}
+						className="absolute inset-0 pointer-events-none overflow-hidden">
 						<div
 							className="absolute inset-0 w-full h-full"
 							style={{
@@ -125,17 +138,7 @@ export default function MonobankCard(props: ICardProps): ReactNode {
 							/>
 
 							{/* Contact pads */}
-							{[
-								{ top: "3px", left: "3px" },
-								{ top: "3px", left: "15px" },
-								{ top: "3px", right: "3px" },
-								{ top: "12px", left: "3px" },
-								{ top: "12px", left: "15px" },
-								{ top: "12px", right: "3px" },
-								{ bottom: "3px", left: "3px" },
-								{ bottom: "3px", left: "15px" },
-								{ bottom: "3px", right: "3px" },
-							].map((pos, i) => (
+							{chipContactPads.map((pos, i) => (
 								<motion.div
 									key={i}
 									className="absolute w-1.5 h-1.5 rounded-sm"
