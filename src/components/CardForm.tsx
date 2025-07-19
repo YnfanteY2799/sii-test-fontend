@@ -1,5 +1,5 @@
 import { CheckCircleIcon, WarningCircleIcon, CreditCardIcon, UserIcon, LockIcon, CalendarDotsIcon } from "@phosphor-icons/react";
-import { formatCardholderName, formatCardNumber, formatCVV, formatExpirationDate } from "@/utils/functions";
+import { formatCardholderName, formatOnlyNumber, formatExpirationDate } from "@/utils/functions";
 import { cardSchema, type TCardFormData } from "@/utils/schema";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { type ChangeEvent, type ReactNode } from "react";
@@ -12,8 +12,9 @@ export default function CardForm(): ReactNode {
 	const {
 		reset,
 		register,
-		handleSubmit,
 		setValue,
+		getValues,
+		handleSubmit,
 		formState: { errors, dirtyFields },
 	} = useForm<TCardFormData>({
 		defaultValues: { number: "", holder: "", expirationDate: "", cvv: "" },
@@ -23,13 +24,17 @@ export default function CardForm(): ReactNode {
 	// RHF Errors
 	const { holder: holderError, number: numberError, cvv: cvvError, expirationDate: expirationDateError } = errors;
 
+	// RHF Dirtyness
 	const { holder: dirtyHolder, number: dirtyNumber, cvv: dirtyCvv, expirationDate: dirtyExpirationDate } = dirtyFields;
+
+	// RHF Values
+	const { cvv, expirationDate, holder, number } = getValues();
 
 	// Functions
 	const submitHandler: SubmitHandler<TCardFormData> = function (_data): void {};
 
 	function handleCardNumberChange({ target: { value } }: ChangeEvent<HTMLInputElement>): void {
-		setValue("number", formatCardNumber(value), { shouldValidate: true, shouldDirty: true });
+		setValue("number", formatOnlyNumber(value), { shouldValidate: true, shouldDirty: true });
 	}
 
 	function handleCardholderNameChange({ target: { value } }: ChangeEvent<HTMLInputElement>): void {
@@ -41,7 +46,7 @@ export default function CardForm(): ReactNode {
 	}
 
 	function handleCVVChange({ target: { value } }: ChangeEvent<HTMLInputElement>): void {
-		setValue("cvv", formatCVV(value), { shouldValidate: true, shouldDirty: true });
+		setValue("cvv", formatOnlyNumber(value), { shouldValidate: true, shouldDirty: true });
 	}
 
 	return (
@@ -58,7 +63,7 @@ export default function CardForm(): ReactNode {
 					initial={{ opacity: 0, scale: 0.9 }}>
 					<div className="flex justify-center">
 						<div className="scale-75 sm:scale-90 lg:scale-100 origin-center">
-							<MonobankCard />
+							<MonobankCard cardNumber={number} cvv={cvv} expiryDate={expirationDate} cardholderName={holder} />
 						</div>
 					</div>
 				</motion.div>
@@ -92,6 +97,8 @@ export default function CardForm(): ReactNode {
                 `}
 							aria-describedby={holderError ? "cardholderName-error" : undefined}
 							aria-invalid={!!holderError}
+							maxLength={20}
+							minLength={2}
 						/>
 						{(holderError || (!holderError && dirtyHolder)) && (
 							<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -151,6 +158,8 @@ export default function CardForm(): ReactNode {
                   `}
 								aria-describedby={numberError ? "cardNumber-error" : undefined}
 								aria-invalid={!!numberError}
+								maxLength={19}
+								minLength={16}
 							/>
 							{(numberError || (!numberError && dirtyNumber)) && (
 								<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -259,6 +268,8 @@ export default function CardForm(): ReactNode {
                   `}
 								aria-describedby={cvvError ? "cvv-error" : undefined}
 								aria-invalid={!!cvvError}
+								maxLength={3}
+								minLength={3}
 							/>
 							{(cvvError || (!cvvError && dirtyCvv)) && (
 								<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute inset-y-0 right-0 pr-3 flex items-center">

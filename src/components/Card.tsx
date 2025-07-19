@@ -1,11 +1,13 @@
-import { useState, type ReactNode } from "react";
 import { motion, type Variants } from "motion/react";
+import { useState, type ReactNode } from "react";
 
 import type { ICardProps } from "@/types/components.ts";
 
 export default function MonobankCard(props: ICardProps): ReactNode {
 	// Props
 	const { cardholderName = "XXXX XXXXX XXXXX", cardNumber = "XXXX XXXX XXXX XXXX", expiryDate = "00/00", cvv = "000" } = props;
+
+	console.log({ cardholderName, cardNumber, expiryDate, cvv });
 
 	// State
 	const [isFlipped, setIsFlipped] = useState<boolean>(false);

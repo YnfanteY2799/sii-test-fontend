@@ -23,5 +23,6 @@ export interface ICardProps {
 	cardholderName?: string;
 	cardNumber?: string;
 	expiryDate?: string;
+	handleFlip?: Function;
 	cvv?: string;
 }
