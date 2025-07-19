@@ -1,6 +1,10 @@
 import { CARD_PATTERNS } from "./consts.ts";
 
-import type { TValidCreditCardType, TCardInfo } from "@/types/data.ts";
+import type { TValidCreditCardType } from "@/types/data.ts";
+
+function sanitizeCardNumber(cardNumber: string): string {
+	return cardNumber.replace(/[\s\-\.]/g, "");
+}
 
 /**
  * Validates a credit card number using the Luhn algorithm (also known as the "modulus 10" algorithm).
@@ -69,10 +73,6 @@ function isValidLuhn(cardNumber: string): boolean {
 	return sum % 10 === 0;
 }
 
-function sanitizeCardNumber(cardNumber: string): string {
-	return cardNumber.replace(/[\s\-\.]/g, "");
-}
-
 /**
  * Determines the credit card type based on the card number pattern and length.
  *
@@ -122,10 +122,6 @@ function sanitizeCardNumber(cardNumber: string): string {
  *
  * @see {@link https://en.wikipedia.org/wiki/Payment_card_number} - Wikipedia on payment card numbers
  * @see {@link https://www.iso.org/standard/31531.html} - ISO/IEC 7812 standard
- *
- * @author Your Name
- * @since 1.0.0
- * @version 2.0.0
  */
 export function creditCardType(cardNumber: string): string {
 	// Handle null, undefined, or non-string inputs
@@ -155,22 +151,6 @@ export function creditCardType(cardNumber: string): string {
 }
 
 export function creditCardTypeWithValidation(cc: string): TValidCreditCardType {
-	const type = creditCardType(cc);
-	const sanitized = sanitizeCardNumber(cc);
-	const isValid = type !== undefined && isValidLuhn(sanitized);
-
-	return { type, isValid };
-}
-
-export function getCardInfo(cc: string): TCardInfo {
-	const sanitized = sanitizeCardNumber(cc);
-	const type = creditCardType(cc);
-	const isValid = type !== undefined && isValidLuhn(sanitized);
-
-	return {
-		type,
-		isValid,
-		sanitized,
-		length: sanitized.length,
-	};
+	const cardType = creditCardType(cc);
+	return { cardType, isValid: cardType !== undefined && isValidLuhn(sanitizeCardNumber(cc)) };
 }

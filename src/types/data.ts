@@ -6,12 +6,5 @@ export interface CardPattern {
 
 export type TValidCreditCardType = {
 	isValid: boolean;
-	type: string;
-};
-
-export type TCardInfo = {
-	sanitized: string;
-	isValid: boolean;
-	length: number;
-	type: string;
+	cardType: string;
 };
