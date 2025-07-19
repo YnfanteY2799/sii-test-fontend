@@ -197,7 +197,7 @@ export default function CardsTable() {
 						<input
 							type="text"
 							value={filters.search}
-							placeholder="Search cards..."
+							placeholder="Buscar por propietario..."
 							onChange={(e) => handleFilterChange("search", e.target.value)}
 							className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 						/>
@@ -208,7 +208,7 @@ export default function CardsTable() {
 						value={filters.cardType}
 						onChange={(e) => handleFilterChange("cardType", e.target.value)}
 						className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-						<option value="">All Card Types</option>
+						<option value="">Tipos de tarjetas</option>
 						<option value="Visa">Visa</option>
 						<option value="Mastercard">Mastercard</option>
 						<option value="Amex">American Express</option>

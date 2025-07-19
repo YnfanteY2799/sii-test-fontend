@@ -5,9 +5,7 @@ import type { ICardProps } from "@/types/components.ts";
 
 export default function MonobankCard(props: ICardProps): ReactNode {
 	// Props
-	const { cardholderName = "XXXX XXXXX XXXXX", cardNumber = "XXXX XXXX XXXX XXXX", expiryDate = "00/00", cvv = "000" } = props;
-
-	console.log({ cardholderName, cardNumber, expiryDate, cvv });
+	const { cardholderName = "", cardNumber = "", expiryDate = "", cvv = "" } = props;
 
 	// State
 	const [isFlipped, setIsFlipped] = useState<boolean>(false);
@@ -171,7 +169,7 @@ export default function MonobankCard(props: ICardProps): ReactNode {
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.4, duration: 0.5 }}
 						className="absolute left-8 top-36 text-white text-3xl font-mono tracking-widest z-10 font-light">
-						{cardNumber}
+						{cardNumber.length ? cardNumber : "XXXX XXXX XXXX XXXX"}
 					</motion.div>
 
 					{/* World Text */}
@@ -181,7 +179,7 @@ export default function MonobankCard(props: ICardProps): ReactNode {
 						whileHover={{ color: "#9ca3af" }}
 						transition={{ delay: 0.5, duration: 0.5 }}
 						className="absolute right-8 top-44 text-gray-600 text-base uppercase tracking-wider font-medium z-10">
-						world
+						World
 					</motion.div>
 
 					{/* Bottom Info */}
@@ -195,9 +193,9 @@ export default function MonobankCard(props: ICardProps): ReactNode {
 								whileHover={{ scale: 1.02 }}
 								transition={{ duration: 0.2 }}
 								className="text-white text-lg font-medium uppercase tracking-wide leading-tight">
-								{cardholderName}
+								{cardholderName.length ? cardholderName : "XXXX XXXXX XXXXX"}
 							</motion.div>
-							<div className="text-gray-400 text-base font-normal">{expiryDate}</div>
+							<div className="text-gray-400 text-base font-normal">{expiryDate.length ? expiryDate : "MM/YY"}</div>
 						</div>
 						<motion.div className="flex items-center" whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
 							<motion.div className="w-10 h-10 rounded-full relative z-20 bg-[#eb001b]" whileHover={{ x: -2 }} transition={{ duration: 0.2 }} />
@@ -251,7 +249,7 @@ export default function MonobankCard(props: ICardProps): ReactNode {
 						transition={{ delay: 0.7, duration: 0.4 }}
 						whileHover={{ scale: 1.1, boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)" }}
 						className="absolute top-56 right-8 w-20 h-10 bg-white rounded-md flex items-center justify-center shadow-md">
-						<div className="text-black text-base font-mono font-bold">{cvv}</div>
+						<div className="text-black text-base font-mono font-bold">{cvv.length ? cvv : "000"}</div>
 					</motion.div>
 
 					{/* CVV label */}
