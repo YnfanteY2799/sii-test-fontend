@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useRef, useEffect } from "react";
+import { type ReactNode, useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 import type { StoredCard, TableFilters, EditingCard } from "@/types/components";
@@ -15,7 +15,7 @@ const initialCards: Array<StoredCard> = [
 	// },
 ];
 
-export default function CardsTable() {
+export default function CardsTable(): ReactNode {
 	// Internal state management
 	const [cards, setCards] = useState<Array<StoredCard>>(initialCards);
 	const [filters, setFilters] = useState<TableFilters>({
@@ -60,8 +60,6 @@ export default function CardsTable() {
 		handleFilterChange("sortBy", column);
 		handleFilterChange("sortOrder", filters.sortBy === column && filters.sortOrder === "asc" ? "desc" : "asc");
 	};
-
-	const addNewCard = (newCard: Omit<StoredCard, "id">) => setCards((prev) => [{ ...newCard, id: Date.now().toString() }, ...prev]);
 
 	const deleteCard = (id: string) => setCards((prev) => prev.filter((card) => card.id !== id));
 
