@@ -154,3 +154,19 @@ export function creditCardTypeWithValidation(cc: string): TValidCreditCardType {
 	const cardType = creditCardType(cc);
 	return { cardType, isValid: cardType !== undefined && isValidLuhn(sanitizeCardNumber(cc)) };
 }
+
+export const formatCardNumber = (value: string): string => value.replace(/\D/g, "").slice(0, 16);
+
+export const formatCardholderName = (value: string): string => value.replace(/[^a-zA-ZÀ-ÿĀ-žА-я\s]/g, "").slice(0, 20);
+
+export const formatExpirationDate = (value: string): string => {
+	const cleaned = value.replace(/\D/g, "");
+	if (cleaned.length >= 2) {
+		const month = cleaned.slice(0, 2);
+		const year = cleaned.slice(2, 4);
+		return year ? `${month}/${year}` : month;
+	}
+	return cleaned;
+};
+
+export const formatCVV = (value: string): string => value.replace(/\D/g, "").slice(0, 4);

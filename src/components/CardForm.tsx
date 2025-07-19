@@ -1,34 +1,11 @@
 import { CheckCircleIcon, WarningCircleIcon, CreditCardIcon, UserIcon, LockIcon, CalendarDotsIcon } from "@phosphor-icons/react";
+import { formatCardholderName, formatCardNumber, formatCVV, formatExpirationDate } from "@/utils/functions";
+import { cardSchema, type TCardFormData } from "@/utils/schema";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { type ChangeEvent, type ReactNode } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type ReactNode } from "react";
 import { motion } from "motion/react";
 import MonobankCard from "./Card";
-import { z } from "zod";
-
-const cardSchema = z.object({
-	number: z
-		.string()
-		.min(16, "Numero de tarjeta demasiado corto!, El numero de tarjeta debe de ser de minimo de 16 caracteres!")
-		.max(19, "Numero de tarjeta demasiado largo!, El numero de tarjeta debe de ser de maximo de 19 caracteres!")
-		.regex(/^\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/, "El numero de tarjeta provisto no es valido!"),
-	holder: z
-		.string()
-		.min(2, "Nombre demasiado corto!, el nombre debe de contener minimo 2 letras!")
-		.max(20, "Nombre demasiado largo!, el nombre debe de contener maximo 20 letras!")
-		.regex(/^[a-zA-Z\s]+$/, "Name can only contain letters and spaces"),
-	expirationDate: z
-		.string()
-		.min(1, "Please select a month")
-		.regex(/^(0[1-9]|1[0-2])$/, "Invalid month"),
-	cvv: z
-		.string()
-		.min(3, "CVV demasiado corto!, debe de ser minimo de 3 digitos")
-		.max(4, "CVV demasiado largo!, debe de ser maximo de 3 digitos")
-		.regex(/^\d{3,4}$/, "CVV must be numeric"),
-});
-
-type TCardFormData = z.infer<typeof cardSchema>;
 
 export default function CardForm(): ReactNode {
 	// RHF
@@ -36,6 +13,7 @@ export default function CardForm(): ReactNode {
 		reset,
 		register,
 		handleSubmit,
+		setValue,
 		formState: { errors, dirtyFields },
 	} = useForm<TCardFormData>({
 		defaultValues: { number: "", holder: "", expirationDate: "", cvv: "" },
@@ -49,6 +27,22 @@ export default function CardForm(): ReactNode {
 
 	// Functions
 	const submitHandler: SubmitHandler<TCardFormData> = function (_data): void {};
+
+	function handleCardNumberChange({ target: { value } }: ChangeEvent<HTMLInputElement>): void {
+		setValue("number", formatCardNumber(value), { shouldValidate: true, shouldDirty: true });
+	}
+
+	function handleCardholderNameChange({ target: { value } }: ChangeEvent<HTMLInputElement>): void {
+		setValue("holder", formatCardholderName(value), { shouldValidate: true, shouldDirty: true });
+	}
+
+	function handleExpirationDateChange({ target: { value } }: ChangeEvent<HTMLInputElement>): void {
+		setValue("expirationDate", formatExpirationDate(value), { shouldValidate: true, shouldDirty: true });
+	}
+
+	function handleCVVChange({ target: { value } }: ChangeEvent<HTMLInputElement>): void {
+		setValue("cvv", formatCVV(value), { shouldValidate: true, shouldDirty: true });
+	}
 
 	return (
 		<motion.div
@@ -85,6 +79,7 @@ export default function CardForm(): ReactNode {
 							id="cardholderName"
 							{...register("holder")}
 							placeholder="Juan Pérez"
+							onChange={handleCardholderNameChange}
 							className={`
                   w-full pl-10 pr-10 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors
                   ${
@@ -98,9 +93,9 @@ export default function CardForm(): ReactNode {
 							aria-describedby={holderError ? "cardholderName-error" : undefined}
 							aria-invalid={!!holderError}
 						/>
-						{holderError && (
+						{(holderError || (!holderError && dirtyHolder)) && (
 							<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute inset-y-0 right-0 pr-3 flex items-center">
-								{holderError === undefined && dirtyHolder ? (
+								{!holderError && dirtyHolder ? (
 									<div className="text-green-500">
 										<CheckCircleIcon />
 									</div>
@@ -142,7 +137,8 @@ export default function CardForm(): ReactNode {
 								type="text"
 								id="cardNumber"
 								{...register("number")}
-								placeholder="1234 5678 9012 3456"
+								placeholder="1234567890123456"
+								onChange={handleCardNumberChange}
 								className={`
                     w-full pl-10 pr-10 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors
                     ${
@@ -155,9 +151,8 @@ export default function CardForm(): ReactNode {
                   `}
 								aria-describedby={numberError ? "cardNumber-error" : undefined}
 								aria-invalid={!!numberError}
-								maxLength={19}
 							/>
-							{numberError && (
+							{(numberError || (!numberError && dirtyNumber)) && (
 								<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute inset-y-0 right-0 pr-3 flex items-center">
 									{!numberError && dirtyNumber ? (
 										<div className="text-green-500">
@@ -197,6 +192,7 @@ export default function CardForm(): ReactNode {
 								placeholder="MM/YY"
 								id="expirationDate"
 								{...register("expirationDate")}
+								onChange={handleExpirationDateChange}
 								className={`
                     w-full pl-10 pr-10 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors
                     ${
@@ -209,9 +205,8 @@ export default function CardForm(): ReactNode {
                   `}
 								aria-describedby={expirationDateError ? "expirationDate-error" : undefined}
 								aria-invalid={!!expirationDateError}
-								maxLength={5}
 							/>
-							{expirationDateError && (
+							{(expirationDateError || (!expirationDateError && dirtyExpirationDate)) && (
 								<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute inset-y-0 right-0 pr-3 flex items-center">
 									{!expirationDateError && dirtyExpirationDate ? (
 										<div className="text-green-500">
@@ -251,6 +246,7 @@ export default function CardForm(): ReactNode {
 								type="password"
 								placeholder="123"
 								{...register("cvv")}
+								onChange={handleCVVChange}
 								className={`
                     w-full pl-10 pr-10 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors
                     ${
@@ -263,9 +259,8 @@ export default function CardForm(): ReactNode {
                   `}
 								aria-describedby={cvvError ? "cvv-error" : undefined}
 								aria-invalid={!!cvvError}
-								maxLength={4}
 							/>
-							{cvvError && (
+							{(cvvError || (!cvvError && dirtyCvv)) && (
 								<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute inset-y-0 right-0 pr-3 flex items-center">
 									{!cvvError && dirtyCvv ? (
 										<div className="text-green-500">
@@ -295,7 +290,7 @@ export default function CardForm(): ReactNode {
 					transition={{ delay: 0.3 }}
 					animate={{ opacity: 1, y: 0 }}
 					initial={{ opacity: 0, y: 20 }}
-					className="flex justify-end-safe gap-4">
+					className="flex justify-end gap-4">
 					<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" type="submit">
 						Agregar
 					</button>
